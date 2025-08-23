@@ -59,38 +59,38 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class TasksService {
-  constructor(
-    @InjectRepository(Task)
-    private tasksRepository: Repository<Task>,
-  ) {}
+    constructor(
+        @InjectRepository(Task)
+        private tasksRepository: Repository<Task>,
+    ) { }
 
-  findAll(): Promise<Task[]> {
-    return this.tasksRepository.find();
-  }
-
-  async findOne(id: number): Promise<Task> {
-    const task = await this.tasksRepository.findOne({ where: { id } });
-    if (!task) {
-        throw new NotFoundException(`Task with id ${id} not found`);
+    findAll(): Promise<Task[]> {
+        return this.tasksRepository.find();
     }
-    return task;
-  }
 
-  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const newTask = this.tasksRepository.create(createTaskDto);
-    return this.tasksRepository.save(newTask);
-  }
-
-  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    const task = await this.findOne(id);
-    if (!task) {
-      throw new NotFoundException(`Task with id ${id} not found`);
+    async findOne(id: number): Promise<Task> {
+        const task = await this.tasksRepository.findOne({ where: { id } });
+        if (!task) {
+            throw new NotFoundException(`Task with id ${id} not found`);
+        }
+        return task;
     }
-    
-    // Update the task properties
-    Object.assign(task, updateTaskDto);
-    
-    // Save the updated task to the database
-    return this.tasksRepository.save(task);
-  }
+
+    createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+        const newTask = this.tasksRepository.create(createTaskDto);
+        return this.tasksRepository.save(newTask);
+    }
+
+    async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+        const task = await this.findOne(id);
+        if (!task) {
+            throw new NotFoundException(`Task with id ${id} not found`);
+        }
+
+        // Update the task properties
+        Object.assign(task, updateTaskDto);
+
+        // Save the updated task to the database
+        return this.tasksRepository.save(task);
+    }
 }
