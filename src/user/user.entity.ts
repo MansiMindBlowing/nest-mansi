@@ -12,6 +12,6 @@ export class User {
     @Column()
     hash: string;
 
-    @Column({nullable: true})
+    @Column({nullable: true, type: 'text'})
     refreshToken: string|null;
 }
