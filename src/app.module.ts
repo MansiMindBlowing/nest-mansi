@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './tasks/task.entity';
 import { User } from './user/user.entity';
+import { NotificationModule } from './notification/notification.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,7 +16,7 @@ import { User } from './user/user.entity';
     }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, NotificationModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get<string>('DATABASE_HOST'),
@@ -29,7 +30,7 @@ import { User } from './user/user.entity';
 
       inject: [ConfigService],
     }),
-    AuthModule, UserModule, BookmarkModule, TasksModule],
+    AuthModule, UserModule, BookmarkModule, TasksModule, NotificationModule],
   controllers: [],
   providers: [],
 })

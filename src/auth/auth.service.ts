@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 // import { Post } from '@nestjs/common'
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 
@@ -28,6 +28,16 @@ async signup(email: string, pass: string){
     const token = await this.getTokens(user.id, user.email);
     return token;
 }
+
+  async validateUser(email: string, pass: string): Promise<any> {
+    // The findOne method was removed. Use findOneBy instead.
+    const user = await this.userService.findOneByEmail(email); 
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
 
 async login(email: string, pass: string){
     const user = await this.userService.findOne(email);
@@ -58,7 +68,7 @@ private async getTokens(userId: number, email: string){
 
      const refreshTokenExpiresIn = this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRES_IN');
         console.log(`Debug: JWT_REFRESH_TOKEN_EXPIRES_IN is "${refreshTokenExpiresIn}"`);
-        
+
     const refreshToken = await this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
         expiresIn: this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRES_IN'),

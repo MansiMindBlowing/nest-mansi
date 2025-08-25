@@ -14,4 +14,11 @@ export class User {
 
     @Column({nullable: true, type: 'text'})
     refreshToken: string|null;
+
+    @Column({nullable: true})
+    deviceId: string
+
+      @Column() 
+  password: string
+
 }

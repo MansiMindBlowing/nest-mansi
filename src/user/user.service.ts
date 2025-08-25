@@ -4,16 +4,28 @@ import { Repository } from "typeorm";
 import { User } from "./user.entity";
 
 @Injectable()
-export class UserService{
+export class UserService {
     constructor(
         @InjectRepository(User)
         private usersRepository: Repository<User>
     ) {}
 
-    findOne(email: string) : Promise < User|null > {
-        return this.usersRepository.findOneBy({email});
+    async findOneByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({where: {email} });
+  }
 
+      async findOneById(id: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { id } });
+  }
+
+   async updateDeviceToken(userId: string, deviceId: string): Promise<User> {
+    const user = await this.findOneById(userId);
+    if (!user) {
+      throw new Error('User not found.');
     }
+    user.deviceId = deviceId;
+    return this.usersRepository.save(user);
+  }
 
     create(user: Partial<User>): Promise<User> {
         const newUser = this.usersRepository.create(user);
