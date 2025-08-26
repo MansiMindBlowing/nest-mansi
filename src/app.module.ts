@@ -11,7 +11,8 @@ import { NotificationModule } from './notification/notification.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      // envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath: ['.env.development', '.env'],
       isGlobal: true,
     }),
 
@@ -25,7 +26,7 @@ import { NotificationModule } from './notification/notification.module';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
         entities: [Task, User],
-        synchronize: true,
+        // synchronize: false,
       }),
 
       inject: [ConfigService],

@@ -16,7 +16,7 @@ export class AuthService {
 
 async signup(email: string, pass: string){
 
-    const existingUser = await this.userService.findOne(email);
+    const existingUser = await this.userService.findOneByEmail(email);
 
     if(existingUser){
         throw new BadRequestException('Email already in use');
@@ -40,7 +40,7 @@ async signup(email: string, pass: string){
   }
 
 async login(email: string, pass: string){
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findOneByEmail(email);
 
     if(!user){
         throw new UnauthorizedException("invalid credentials");

@@ -4,29 +4,24 @@ import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { sendNotificationDTO } from 'src/auth/dto/send-notification.dto';
-import type { Response } from 'express'; 
+import type { Response } from 'express'
+
 @Controller('notification')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-// @Post()
-//   sendNotification(@Body() pushNotification: sendNotificationDTO) {
-//     this.notificationService.sendPush(pushNotification);
-//   }
+  @Post('register')
+  registerToken(@Body() body: {token: string}){
+    return this.notificationService.registerToken(body.token);
+  }
 
      @Post('send') // Use a more descriptive path
-  async sendNotification(@Body() pushNotification: sendNotificationDTO, @Res() res: Response) {
-    try {
-      const result = await this.notificationService.sendPush(pushNotification);
-      return res.status(HttpStatus.OK).json(result);
-
-    } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: 'Failed to send notification',
-        error: error.message,
-      });
-    }
+  async sendNotification(@Body() body: {title: string; body: string; token: string}) {
+   return this.notificationService.sendPush({
+    title: body.title,
+    body: body.body,
+    deviceId: body.token,
+   }) ;
   }
 
   @Get()

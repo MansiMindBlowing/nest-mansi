@@ -14,11 +14,11 @@ export class UserService {
     return this.usersRepository.findOne({where: {email} });
   }
 
-      async findOneById(id: string): Promise<User | null> {
-    return this.usersRepository.findOne({ where: { id } });
+      async findOneById(id: number): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id });
   }
 
-   async updateDeviceToken(userId: string, deviceId: string): Promise<User> {
+   async updateDeviceToken(userId: number, deviceId: string): Promise<User> {
     const user = await this.findOneById(userId);
     if (!user) {
       throw new Error('User not found.');

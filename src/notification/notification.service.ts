@@ -12,47 +12,10 @@ export class NotificationService {
 private readonly messaging: Messaging;
 
  constructor(@Inject('FIREBASE_ADMIN') private readonly firebaseApp: App) {
-    // Correctly get the messaging service from the injected Firebase app
+    
     this.messaging = getMessaging(this.firebaseApp);
   }
-  // async sendPush(notification: sendNotificationDTO) {
-  //   try {
-  //     await firebase
-  //       .messaging()
-  //       .send({
-  //         notification: {
-  //           title: notification.title,
-  //           body: notification.body,
-  //         },
-  //         token: notification.deviceId,
-  //         data: {},
-  //         android: {
-  //           priority: 'high',
-  //           notification: {
-  //             sound: 'default',
-  //             channelId: 'default',
-  //           },
-  //         },
-  //         apns: {
-  //           headers: {
-  //             'apns-priority': '10',
-  //           },
-  //           payload: {
-  //             aps: {
-  //               contentAvailable: true,
-  //               sound: 'default',
-  //             },
-  //           },
-  //         },
-  //       })
-  //       .catch((error: any) => {
-  //         console.error(error);
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //     return error;
-  //   }
-  // }
+
 
    async sendPush(notification: sendNotificationDTO) {
     try {
@@ -91,7 +54,15 @@ private readonly messaging: Messaging;
     }
   }
 
+    private tokens: string[]= [];
 
+    registerToken(token: string){
+      if(!this.tokens.includes(token)){
+        this.tokens.push(token);
+      }
+
+      return { success: true, tokens: this.tokens}
+    }
   create(CreateNotificationDto: CreateNotificationDto) {
     return 'This action adds a new notification';
   }
