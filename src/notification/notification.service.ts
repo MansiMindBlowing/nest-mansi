@@ -19,12 +19,13 @@ private readonly messaging: Messaging;
 
    async sendPush(notification: sendNotificationDTO) {
     try {
+          console.log("DEBUG Notification Payload:", notification);
       const response = await this.messaging.send({
         notification: {
           title: notification.title,
           body: notification.body,
         },
-        token: notification.deviceId,
+        token: notification.token,
         data: {},
         android: {
           priority: 'high',

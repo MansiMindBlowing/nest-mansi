@@ -15,12 +15,13 @@ export class NotificationController {
     return this.notificationService.registerToken(body.token);
   }
 
-     @Post('send') // Use a more descriptive path
-  async sendNotification(@Body() body: {title: string; body: string; token: string}) {
+     @Post('send') 
+  async sendNotification(@Body() body: {title: string; body: string; token: string; deviceId: string}) {
    return this.notificationService.sendPush({
     title: body.title,
     body: body.body,
-    deviceId: body.token,
+    // deviceId: body.deviceId,
+     token: body.token, 
    }) ;
   }
 
